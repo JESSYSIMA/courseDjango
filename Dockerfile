@@ -16,5 +16,5 @@ COPY . .
 # Exposer le port (celui de gunicorn)
 EXPOSE 8000
 
-# Commande pour lancer le serveur Django avec gunicorn
-CMD ["gunicorn", "CourseManagement.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Commande pour lancer le serveur Django avec migrations
+CMD ["sh", "-c", "python manage.py makemigrations --noinput && python manage.py migrate --noinput && gunicorn CourseManagement.wsgi:application --bind 0.0.0.0:8000"]

@@ -126,4 +126,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
-ALLOWED_HOSTS = ['django-3fra.onrender.com']
+ALLOWED_HOSTS = ['coursedjango.onrender.com']
