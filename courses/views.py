@@ -61,7 +61,7 @@ def associate_student(request):
     course_id = data['course_id']
 
     course = Course.objects.get(id=course_id)
-    StudentCourse.objects.create(student_id=student_id, course=course)
+    StudentCourse.objects.get_or_create(student_id=student_id, course=course)
 
     return Response({'message': 'Student associated successfully'}, status=status.HTTP_201_CREATED)
 
