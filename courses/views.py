@@ -80,26 +80,18 @@ def get_courses_by_student(request, student_id):
     ]
     return JsonResponse(courses, safe=False)
 
-# views.py (AJOUTER À LA FIN DU FICHIER)
-
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import StudentCourse # Assurez-vous que StudentCourse est importé
 
 
 @api_view(['DELETE'])
-def disassociate_all_student_courses(request, student_id):
-    """
-    Supprime toutes les associations de cours (StudentCourse) pour un étudiant donné.
-    Ceci corrige la désélection.
-    """
+def delete_student_course_association(request, student_id, course_id):
+    
     try:
-        # Supprime tous les enregistrements StudentCourse pour cet étudiant
-        deleted_count, _ = StudentCourse.objects.filter(student_id=student_id).delete()
         
-        # Le code d'état HTTP 204 No Content est approprié ici pour une suppression réussie
-        return Response({'message': f'{deleted_count} cours désassociés avec succès.'}, status=status.HTTP_204_NO_CONTENT)
+        association = StudentCourse.objects.get(student_id=student_id, course_id=course_id)
+        association.delete()
+        
+        return Response({'message': 'Association supprimée avec succès'}, status=status.HTTP_204_NO_CONTENT)
+    except StudentCourse.DoesNotExist:
+        return Response({'message': 'Association non trouvée'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        # En cas d'erreur
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
