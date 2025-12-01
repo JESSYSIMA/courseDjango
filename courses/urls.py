@@ -9,4 +9,5 @@ urlpatterns = [
     path('search/', views.search_courses, name='search_courses'),
     path('associate/', views.associate_student, name='associate_student'),
     path('student-courses/<int:student_id>/', views.get_courses_by_student, name='get_courses_by_student'),
+    path('courses/disassociate-all/<str:student_id>/', views.disassociate_all_student_courses, name='disassociate_all_student_courses'),
 ]
