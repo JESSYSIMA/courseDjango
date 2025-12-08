@@ -111,7 +111,7 @@ def get_students_by_course(request, course_id):
     for sid in student_ids:
         try:
             # Requête vers le microservice Spring Boot
-            res = requests.get(f"https://studentservice-blus.onrender.com/students/{sid}")
+            res = requests.get(f"https://studentservice-blus.onrender.com/students/get/{sid}")
             if res.status_code == 200:
                 students.append(res.json())
             else:
