@@ -99,15 +99,24 @@ def delete_student_course_association(request, student_id, course_id):
 
 @api_view(['GET'])
 def get_students_by_course(request, course_id):
-    import requests
-
+    """
+    Récupère tous les étudiants inscrits à un cours donné.
+    Interroge le microservice Spring Boot pour obtenir les infos des étudiants.
+    """
     students = []
-    # Ici tu connais les IDs des étudiants : par exemple, tu peux avoir un endpoint Spring Boot pour tous les étudiants
-    all_students = requests.get("http://localhost:9095/students/getAll").json()
+
     
-    for s in all_students:
-        courses = requests.get(f"http://localhost:9095/courses/student-courses/{s['id']}/").json()
-        if any(c['id'] == course_id for c in courses):
-            students.append(s)
+    student_ids = StudentCourse.objects.filter(course_id=course_id).values_list('student_id', flat=True)
+
+    for sid in student_ids:
+        try:
+            # Requête vers le microservice Spring Boot
+            res = requests.get(f"https://studentservice-blus.onrender.com/students/{sid}")
+            if res.status_code == 200:
+                students.append(res.json())
+            else:
+                print(f"Student {sid} introuvable sur le microservice (status {res.status_code})")
+        except requests.RequestException as e:
+            print(f"Erreur fetch student {sid}: {e}")
 
     return JsonResponse(students, safe=False)
