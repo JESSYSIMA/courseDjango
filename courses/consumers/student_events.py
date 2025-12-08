@@ -1,8 +1,10 @@
-import pika, json
-from django.conf import settings
-from ..models import StudentCourse, Course
+import pika
+import json
 
 def start_consumer():
+    # Importer les modèles à l'intérieur de la fonction pour éviter AppRegistryNotReady
+    from ..models import StudentCourse, Course
+
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='localhost')
     )
@@ -21,16 +23,18 @@ def start_consumer():
 
     def callback(ch, method, properties, body):
         data = json.loads(body)
-        student_id = data["student_id"]
-        course_id = data["course_id"]
+        student_id = data.get("student_id")
+        course_id = data.get("course_id")
 
-        course = Course.objects.get(id=course_id)
-        StudentCourse.objects.get_or_create(
-            student_id=student_id,
-            course=course
-        )
-
-        print("✔️ Association student-course traitée via RabbitMQ")
+        try:
+            course = Course.objects.get(id=course_id)
+            StudentCourse.objects.get_or_create(
+                student_id=student_id,
+                course=course
+            )
+            print(f"✔️ Association student-course traitée pour student_id={student_id}, course_id={course_id}")
+        except Course.DoesNotExist:
+            print(f"❌ Course avec id={course_id} introuvable")
 
     channel.basic_consume(
         queue=queue_name,
