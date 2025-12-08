@@ -95,3 +95,9 @@ def delete_student_course_association(request, student_id, course_id):
         return Response({'message': 'Association non trouvée'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+@api_view(['GET'])
+def get_students_by_course(request, course_id):
+    
+    student_ids = StudentCourse.objects.filter(course_id=course_id).values_list('student_id', flat=True)
+    students = Student.objects.filter(id__in=student_ids).values('id', 'first_name', 'last_name', 'email')
+    return JsonResponse(list(students), safe=False)
