@@ -1,6 +1,6 @@
 import pika, json
 from django.conf import settings
-from .models import StudentCourse, Course
+from ..models import StudentCourse, Course
 
 def start_consumer():
     connection = pika.BlockingConnection(
