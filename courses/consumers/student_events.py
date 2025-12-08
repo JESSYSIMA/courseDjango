@@ -1,6 +1,6 @@
 import pika, json, time
 from urllib.parse import urlparse
-from ..config import RABBITMQ_URL
+from CourseManagement.config import RABBITMQ_URL
 from ..models import StudentCourse, Course
 
 def start_consumer():
