@@ -10,6 +10,6 @@ urlpatterns = [
     path('associate/', views.associate_student, name='associate_student'),
     path('student-courses/<int:student_id>/', views.get_courses_by_student, name='get_courses_by_student'),
     path('delete-association/<str:student_id>/<str:course_id>/', views.delete_student_course_association, name='delete_student_course_association'),
-    path('courses/<int:course_id>/students/', views.get_students_by_course, name='get_students_by_course'),
+    path('<int:course_id>/students/', views.get_students_by_course, name='get_students_by_course'),
 
 ]
