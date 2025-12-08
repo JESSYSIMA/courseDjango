@@ -4,6 +4,7 @@ from rest_framework import status
 from django.db.models import Q
 from .models import Course, StudentCourse
 from django.http import JsonResponse
+import requests
 
 @api_view(['POST'])
 def add_course(request):
