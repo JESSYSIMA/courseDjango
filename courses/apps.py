@@ -1,6 +1,9 @@
 from django.apps import AppConfig
+from threading import Thread
+from .consumers.student_events import start_consumer
 
+class CourseConfig(AppConfig):
+    name = 'course'
 
-class CoursesConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'courses'
+    def ready(self):
+        Thread(target=start_consumer).start()

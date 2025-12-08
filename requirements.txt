@@ -5,3 +5,4 @@ django-prometheus
 prometheus-client
 djangorestframework
 django-cors-headers
+pika>=1.3.1
